@@ -1,0 +1,29 @@
+{
+    "author": "Velocity Made Good Ltd.",
+    "name": "node-hlr-client",
+    "description": "Official HLR Lookup API Node JS SDK by www.hlr-lookups.com",
+    "version": "0.0.9",
+    "repository": {
+        "url": ""
+    },
+    "main": "./lib/node-hlr-client",
+    "keywords": [
+        "hlr",
+        "hlr lookup",
+        "hlr lookups",
+        "hlr lookup api"
+    ],
+    "bin": {
+        "uppercaseme": "./bin/node-hlr-client"
+    },
+    "dependencies": {
+        "node-rest-client": "*"
+    },
+    "engines": {
+        "node": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vmgltd/hlr-lookup-api-nodejs-sdk.git"
+    }
+}
