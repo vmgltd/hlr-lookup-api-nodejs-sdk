@@ -1,5 +1,5 @@
-hlr-lookup-api-nodejs-sdk
-=========================
+node-hlr-client
+===============
 Official HLR Lookup API Node JS SDK by www.hlr-lookups.com
 
 For SDKs in different languages, see https://www.hlr-lookups.com/en/sdks
