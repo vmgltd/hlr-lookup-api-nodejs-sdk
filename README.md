@@ -126,7 +126,7 @@ The code contains annotations and you can find usage examples as tests in `tests
 * `tests/test-client.js`
 * `tests/test-callback.js`
 
-Please refer to https://www.hlr-lookups.com/en/sdks/nodejs for further documentation or send us an email to service@hlr-lookups.com.
+Please refer to https://www.hlr-lookups.com/en/sdk-node-js for further documentation or send us an email to service@hlr-lookups.com.
 
 Support and Feedback
 --------------------
