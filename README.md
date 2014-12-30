@@ -43,7 +43,7 @@ client.submitSyncLookupRequest(function(response) {
 }, '+491788735000');
 
 /**
- * Submits asynchronous HLR Lookups containing up to 1,000 MSISDNs per request. Results are sent back asynchronously to a callback URL on your server. Use \VmgLtd\HlrCallbackHandler to capture them.
+ * Submits asynchronous HLR Lookups containing up to 1,000 MSISDNs per request. Results are sent back asynchronously to a callback URL on your server.
  *
  * @param callback - callback function(response)
  * @param msisdns - A list of MSISDNs in international format, e.g. +491788735000
