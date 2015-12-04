@@ -77,6 +77,64 @@ HlrLookupClient.prototype.submitSyncLookupRequest = function submitSyncLookupReq
 };
 
 /**
+ * Submits a synchronous number type lookup request. The HLR is queried in real time and results presented in the response body.
+ *
+ * @param callback - callback function(response)
+ * @param number - An number in international format, e.g. +4989702626
+ * @param route - An optional route assignment, see: http://www.hlr-lookups.com/en/routing-options
+ * @param storage - An optional storage assignment, see: http://www.hlr-lookups.com/en/storages
+ * @returns {*}
+ *
+ * Return example: {"success":true,"messages":[],"results":[{"id":"3cdb4e4d0ec1","number":"+4989702626","numbertype":"LANDLINE","state":"COMPLETED","isvalid":"Yes","ispossiblyported":"No","isvalidshortnumber":"No","isvanitynumber":"No","qualifiesforhlrlookup":"No","originalcarrier":null,"countrycode":"DE","mcc":null,"mnc":null,"mccmnc":null,"region":"Munich","timezones":["Europe\/Berlin"],"infotext":"This is a landline number.","usercharge":"0.0050","inserttime":"2015-12-04 13:02:48.415133+00","storage":"SYNC-API-NT-2015-12","route":"LC1"}]}
+ */
+HlrLookupClient.prototype.submitSyncNumberTypeLookupRequest = function submitSyncNumberTypeLookupRequest(callback, number, route, storage) {
+
+    if (!callback || typeof callback != 'function') {
+        return console.error('Invalid Argument: callback');
+    }
+
+    if (!this.validateUsage()) {
+        return callback(generateErrorResponse('Missing client arguments (username or password)'));
+    }
+
+    if (!number) {
+        return callback(generateErrorResponse('Missing Argument: number'));
+    }
+
+    if (typeof number != 'string') {
+        return callback(generateErrorResponse('Invalid Argument: number must be of type string'));
+    }
+
+    if (route) {
+        if (typeof route != 'string') {
+            return callback(generateErrorResponse('Invalid Argument: route must be of type string'));
+        }
+    }
+
+    if (storage) {
+        if (typeof storage != 'string') {
+            return callback(generateErrorResponse('Invalid Argument: storage must be of type string'));
+        }
+    }
+
+    client.post(this.url, {
+            data: {
+                action: "submitSyncNumberTypeLookupRequest",
+                number: number,
+                username: this.username,
+                password: this.password,
+                route: route ? route : null,
+                storage: storage ? storage : null
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        },
+        callback);
+
+};
+
+/**
  * Submits asynchronous HLR Lookups containing up to 1,000 MSISDNs per request. Results are sent back asynchronously to a callback URL on your server. Use \VmgLtd\HlrCallbackHandler to capture them.
  *
  * @param callback - callback function(response)
@@ -135,6 +193,64 @@ HlrLookupClient.prototype.submitAsyncLookupRequest = function submitAsyncLookupR
 };
 
 /**
+ * Submits asynchronous number type lookups containing up to 1,000 MSISDNs per request. Results are sent back asynchronously to a callback URL on your server.
+ *
+ * @param callback - callback function(response)
+ * @param numbers - A list of numbers in international format, e.g. +4989702626,+491788735000
+ * @param route - An optional route assignment, see: http://www.hlr-lookups.com/en/routing-options
+ * @param storage - An optional storage assignment, see: http://www.hlr-lookups.com/en/storages
+ * @returns {*}
+ *
+ * Return example: {"success":true,"messages":[],"results":{"acceptedNumbers":[{"id":"4f0820c76fb7","number":"+4989702626"},{"id":"9b9a7dab11a4","number":"+491788735000"}],"rejectedNumbers":[],"acceptedNumberCount":2,"rejectedNumberCount":0,"totalCount":2,"charge":0.01,"storage":"ASYNC-API-NT-2015-12","route":"LC1"}}
+ */
+HlrLookupClient.prototype.submitAsyncNumberTypeLookupRequest = function submitAsyncNumberTypeLookupRequest(callback, numbers, route, storage) {
+
+    if (!callback || typeof callback != 'function') {
+        return console.error('Invalid Argument: callback');
+    }
+
+    if (!this.validateUsage()) {
+        return callback(generateErrorResponse('Missing client arguments (username or password)'));
+    }
+
+    if (!numbers) {
+        return callback(generateErrorResponse('Missing Argument: numbers'));
+    }
+
+    if (typeof numbers != 'object') {
+        return callback(generateErrorResponse('Invalid Argument: msisdns must be of type array'));
+    }
+
+    if (route) {
+        if (typeof route != 'string') {
+            return callback(generateErrorResponse('Invalid Argument: route must be of type string'));
+        }
+    }
+
+    if (storage) {
+        if (typeof storage != 'string') {
+            return callback(generateErrorResponse('Invalid Argument: storage must be of type string'));
+        }
+    }
+
+    client.post(this.url, {
+            data: {
+                action: "submitAsyncNumberTypeLookupRequest",
+                numbers: convertMsisdnsArrayToString(numbers),
+                username: this.username,
+                password: this.password,
+                route: route ? route : null,
+                storage: storage ? storage : null
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        },
+        callback);
+
+};
+
+/**
  * Sets the callback URL for asynchronous lookups. Read more about the concept of asynchronous HLR lookups @ http://www.hlr-lookups.com/en/asynchronous-hlr-lookup-api
  *
  * @param callback - callback function(response)
@@ -177,6 +293,48 @@ HlrLookupClient.prototype.setAsyncCallbackUrl = function setAsyncCallbackUrl(cal
 };
 
 /**
+ * Sets the callback URL for asynchronous number type lookups.
+ *
+ * @param callback - callback function(response)
+ * @param url - callback url on your server
+ * @returns {*}
+ *
+ * Return example: {"success":true,"messages":[],"results":{"url":"http:\/\/user:pass@www.your-server.com\/path\/file"}}
+ */
+HlrLookupClient.prototype.setNtAsyncCallbackUrl = function setNtAsyncCallbackUrl(callback, url) {
+
+    if (!callback || typeof callback != 'function') {
+        return console.error('Invalid Argument: callback');
+    }
+
+    if (!this.validateUsage()) {
+        return callback(generateErrorResponse('Missing client arguments (username or password)'));
+    }
+
+    if (!url) {
+        return callback(generateErrorResponse('Missing Argument: url'));
+    }
+
+    if (typeof url != 'string') {
+        return callback(generateErrorResponse('Invalid Argument: url must be of type string'));
+    }
+
+    client.post(this.url, {
+            data: {
+                action: "setNtAsyncCallbackUrl",
+                url: url,
+                username: this.username,
+                password: this.password
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        },
+        callback);
+
+};
+
+/**
  * Returns the remaining balance (EUR) in your account.
  *
  * @param callback - callback function(response)
@@ -205,6 +363,38 @@ HlrLookupClient.prototype.getBalance = function getBalance(callback) {
         }
     },
     callback);
+
+};
+
+/**
+ * Performs a system health check and returns a sanity report.
+ *
+ * @param callback - callback function(response)
+ * @returns {*}
+ *
+ * Return example: { "success":true, "results":{ "system":{ "state":"up" }, "routes":{ "states":{ "IP1":"up", "ST2":"up", "SV3":"up", "IP4":"up", "XT5":"up", "XT6":"up", "NT7":"up", "LC1":"up" } }, "account":{ "lookupsPermitted":true, "balance":"295.23000" } } }
+ */
+HlrLookupClient.prototype.doHealthCheck = function doHealthCheck(callback) {
+
+    if (!callback || typeof callback != 'function') {
+        return console.error('Invalid Argument: callback');
+    }
+
+    if (!this.validateUsage()) {
+        return callback(generateErrorResponse('Missing client arguments (username or password)'));
+    }
+
+    client.post(this.url, {
+            data: {
+                action: "doHealthCheck",
+                username: this.username,
+                password: this.password
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        },
+        callback);
 
 };
 
