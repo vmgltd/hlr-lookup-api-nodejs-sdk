@@ -1,31 +1,28 @@
 {
-    "author": "Velocity Made Good Ltd.",
-    "name": "node-hlr-client",
-    "description": "Official HLR Lookup API Node JS SDK by www.hlr-lookups.com",
-    "version": "0.0.11",
-    "repository": {
-        "url": ""
-    },
-    "main": "./lib/node-hlr-client",
-    "keywords": [
-        "hlr",
-        "hlr lookup",
-        "hlr lookups",
-        "hlr lookup api",
-        "landline lookups",
-        "number type lookups"
-    ],
-    "bin": {
-        "uppercaseme": "./bin/node-hlr-client"
-    },
-    "dependencies": {
-        "node-rest-client": "*"
-    },
-    "engines": {
-        "node": "*"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/vmgltd/hlr-lookup-api-nodejs-sdk.git"
-    }
+  "author": "Velocity Made Good Ltd.",
+  "name": "node-hlr-client",
+  "description": "Official HLR Lookup API Node JS SDK by www.hlr-lookups.com",
+  "version": "0.0.12",
+  "main": "./lib/node-hlr-client",
+  "keywords": [
+    "hlr",
+    "hlr lookup",
+    "hlr lookups",
+    "hlr lookup api",
+    "landline lookups",
+    "number type lookups"
+  ],
+  "bin": {
+    "uppercaseme": "./bin/node-hlr-client"
+  },
+  "dependencies": {
+    "node-rest-client": "*"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vmgltd/hlr-lookup-api-nodejs-sdk.git"
+  }
 }
