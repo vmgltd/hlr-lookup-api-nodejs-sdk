@@ -1,194 +1,241 @@
-node-hlr-client
-===============
-Official HLR Lookup API Node JS SDK by www.hlr-lookups.com
+# HLR Lookups SDK (NodeJS)
 
-This SDK implements the REST API documented at https://www.hlr-lookups.com/en/api-docs
+Official HLR Lookup API SDK for NodeJS by www.hlr-lookups.com. Obtain live mobile phone connectivity and portability data from network operators directly.
 
-For SDKs in other programming languages, see https://www.hlr-lookups.com/en/sdks
+This SDK implements the REST API documented at https://www.hlr-lookups.com/en/api-docs and includes an [HLR API](https://www.hlr-lookups.com/en/api-docs#post-hlr-lookup) (live connectivity), [NT API](https://www.hlr-lookups.com/en/api-docs#post-nt-lookup) (number types), as well as an [MNP API](https://www.hlr-lookups.com/en/api-docs#post-mnp-lookup) (mobile number portability).
+
+For SDKs in different programming languages, see https://www.hlr-lookups.com/en/api-docs#sdks
 
 Requirements
 ------------
-* node-rest-client
+* NodeJS >= 10.14.0
+* axios >= 0.19.2
 
 Installation with npm
 ---------------------
-```bash
-npm install node-hlr-client
-```
+`npm install node-hlr-client`
 
 **Usage Client**
-```node
-#!/usr/bin/env node
+```javascript
+require('node-hlr-client');
 
-var HlrLookupClient = require("node-hlr-client");
-var StringDecoder = require('string_decoder').StringDecoder;
-var decoder = new StringDecoder('utf8');
-
-var client = new HlrLookupClient(
-    'username',
-    'password'
+const client = new HlrLookupClient(
+    'YOUR-API-KEY',
+    'YOUR-API-SECRET'
 );
+```
+Get your API key and secret [here](https://www.hlr-lookups.com/en/api-settings).
 
-/**
- * Submits a synchronous HLR Lookup request. The HLR is queried in real time and results presented in the response body.
- *
- * @param callback - callback function(response)
- * @param msisdn - An MSISDN in international format, e.g. +491788735000
- * @param route - An optional route assignment, see: http://www.hlr-lookups.com/en/routing-options
- * @param storage - An optional storage assignment, see: http://www.hlr-lookups.com/en/storages
- * @returns {*}
- *
- * Callback example: {"success":true,"results":[{"id":"e1fdf26531e4","msisdncountrycode":"DE","msisdn":"+491788735000","statuscode":"HLRSTATUS_DELIVERED","hlrerrorcodeid":null,"subscriberstatus":"SUBSCRIBERSTATUS_CONNECTED","imsi":"262031300000000","mccmnc":"26203","mcc":"262","mnc":"03","msin":"1300000000","servingmsc":"140445","servinghlr":null,"originalnetworkname":"E-Plus","originalcountryname":"Germany","originalcountrycode":"DE","originalcountryprefix":"+49","originalnetworkprefix":"178","roamingnetworkname":"Fixed Line Operators and Other Networks","roamingcountryname":"United States","roamingcountrycode":"US","roamingcountryprefix":"+1","roamingnetworkprefix":"404455","portednetworkname":null,"portedcountryname":null,"portedcountrycode":null,"portedcountryprefix":null,"portednetworkprefix":null,"isvalid":"Yes","isroaming":"Yes","isported":"No","usercharge":"0.0100","inserttime":"2014-12-28 06:22:00.328844+08","storage":"SDK-TEST-SYNC-API","route":"IP1","interface":"Sync API"}]}
- */
-client.submitSyncLookupRequest(function(response) {
-    console.log(decoder.write(response));
-}, '+491788735000');
+## Examples
 
-/**
- * Submits a synchronous number type lookup request. The HLR is queried in real time and results presented in the response body.
- *
- * @param callback - callback function(response)
- * @param number - An number in international format, e.g. +4989702626
- * @param route - An optional route assignment, see: http://www.hlr-lookups.com/en/routing-options
- * @param storage - An optional storage assignment, see: http://www.hlr-lookups.com/en/storages
- * @returns {*}
- *
- * Callback example: {"success":true,"results":[{"id":"2ed0788379c6","number":"+4989702626","numbertype":"LANDLINE","state":"COMPLETED","isvalid":"Yes","invalidreason":null,"ispossiblyported":"No","isvanitynumber":"No","qualifiesforhlrlookup":"No","originalcarrier":null,"mccmnc":null,"mcc":null,"mnc":null,"countrycode":"DE","regions":["Munich"],"timezones":["Europe\/Berlin"],"infotext":"This is a landline number.","usercharge":"0.0050","inserttime":"2015-12-04 10:36:41.866283+00","storage":"SYNC-API-NT-2015-12","route":"LC1","interface":"Sync API"}]}
- */
-client.submitSyncNumberTypeLookupRequest(function(response) {
-    console.log(decoder.write(response));
-}, '+4989702626');
+**Test Authentication** (https://www.hlr-lookups.com/en/api-docs#get-auth-test)
 
-/**
- * Submits asynchronous HLR Lookups containing up to 1,000 MSISDNs per request. Results are sent back asynchronously to a callback URL on your server. Use \VmgLtd\HlrCallbackHandler to capture them.
- *
- * @param callback - callback function(response)
- * @param msisdns - A list of MSISDNs in international format, e.g. +491788735000
- * @param route - An optional route assignment, see: http://www.hlr-lookups.com/en/routing-options
- * @param storage - An optional storage assignment, see: http://www.hlr-lookups.com/en/storages
- * @returns {*}
- *
- * Callback example: {"success":true,"messages":[],"results":{"acceptedMsisdns":[{"id":"e489a092eba7","msisdn":"+491788735000"},{"id":"23ad48bf0c26","msisdn":"+491788735001"}],"rejectedMsisdns":[],"acceptedMsisdnCount":2,"rejectedMsisdnCount":0,"totalCount":2,"charge":0.02,"storage":"SDK-TEST-ASYNC-API","route":"IP4"}}
- */
-client.submitAsyncLookupRequest(function(response) {
-    console.log(decoder.write(response));
-}, ['+491788735000', '+491788735001']);
+Performs an authenticated request against the `GET /auth-test` endpoint. A status code of 200 indicates that you were able to authenticate using you [API credentials](https://www.hlr-lookups.com/en/api-settings#authSettings).
 
-/**
- * Submits asynchronous number type lookups containing up to 1,000 numbers per request. Results are sent back asynchronously to a callback URL on your server.
- *
- * @param callback - callback function(response)
- * @param numbers - A list of numbers in international format, e.g. +4989702626,+491788735000
- * @param route - An optional route assignment, see: http://www.hlr-lookups.com/en/routing-options
- * @param storage - An optional storage assignment, see: http://www.hlr-lookups.com/en/storages
- * @returns {*}
- *
- * Callback example: {"success":true,"messages":[],"results":{"acceptedNumbers":[{"id":"4f0820c76fb7","number":"+4989702626"},{"id":"9b9a7dab11a4","number":"+491788735000"}],"rejectedNumbers":[],"acceptedNumberCount":2,"rejectedNumberCount":0,"totalCount":2,"charge":0.01,"storage":"ASYNC-API-NT-2015-12","route":"LC1"}}
- */
-client.submitAsyncNumberTypeLookupRequest(function(response) {
-    console.log(decoder.write(response));
-}, ['+4989702626', '+491788735000']);
+```javascript
+client.get('/auth-test', 
+    null,
+    function (response) {
 
-/**
- * Sets the callback URL for asynchronous lookups. Read more about the concept of asynchronous HLR lookups @ http://www.hlr-lookups.com/en/asynchronous-hlr-lookup-api
- *
- * @param callback - callback function(response)
- * @param url - callback url on your server
- * @returns {*}
- *
- * Callback example: {"success":true,"messages":[],"results":{"url":"http:\/\/user:pass@www.your-server.com\/path\/file"}}
- */
-client.setAsyncCallbackUrl(function(response) {
-    console.log(decoder.write(response));
-}, 'http://user:pass@www.your-server.com/path/file');
+        console.log(response.status);
+        console.log(response.data);
 
-/**
- * Sets the callback URL for asynchronous number type lookups.
- *
- * @param callback - callback function(response)
- * @param url - callback url on your server
- * @returns {*}
- *
- * Callback example: {"success":true,"messages":[],"results":{"url":"http:\/\/user:pass@www.your-server.com\/path\/file"}}
- */
-client.setNtAsyncCallbackUrl(function(response) {
-    console.log(decoder.write(response));
-}, 'http://user:pass@www.your-server.com/path/file');
+        if (response.status === 200) {
+            // authentication was successful
+        }
 
-/**
- * Returns the remaining balance (EUR) in your account.
- *
- * @param callback - callback function(response)
- * @returns {*}
- *
- * Callback example: {"success":true,"messages":[],"results":{"balance":"5878.24600"}}
- */
-client.getBalance(function(response) {
-    console.log(decoder.write(response));
-});
-
-/**
- * Performs a system health check and returns a sanity report.
- *
- * @param callback - callback function(response)
- * @returns {*}
- *
- * Return example: { "success":true, "results":{ "system":{ "state":"up" }, "routes":{ "states":{ "IP1":"up", "ST2":"up", "SV3":"up", "IP4":"up", "XT5":"up", "XT6":"up", "NT7":"up", "LC1":"up" } }, "account":{ "lookupsPermitted":true, "balance":"295.23000" } } }
- */
-client.doHealthCheck(function(response) {
-    console.log(decoder.write(response));
-});
-
+    }
+);
 ```
 
-**Usage Callback Handler**
-```node
-#!/usr/bin/env node
+Get your API key and secret [here](https://www.hlr-lookups.com/en/api-settings).
 
-var http = require('http');
-var url = require("url");
-var port = 8181;
-var HlrLookupClient = require("node-hlr-client");
-var client = new HlrLookupClient();
+**Submitting an HLR Lookup** ([HLR API Docs](https://www.hlr-lookups.com/en/api-docs#post-hlr-lookup))
 
-http.createServer(function(request, response) {
+```javascript
+client.post('/hlr-lookup',
+    {
+        msisdn: '+905536939460'
+    },
+    function(response) {
 
-    if (request.url == '/favicon.ico') return;
-    var params = url.parse(request.url, true).query;
+        // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
+        console.log('HLR Lookup Status Code', response.status);
+        console.log('HLR Lookup Response Body', response.data);
 
-    /**
-     * Parses an asynchronous HLR Lookup callback and returns a JSON string with the results.
-     *
-     * @param params
-     * @returns {*}
-     *
-     * Return example: {"success":true,"results":[{"id":"40ebb8d9e7cc","msisdncountrycode":"DE","msisdn":"+491788735001","statuscode":"HLRSTATUS_DELIVERED","hlrerrorcodeid":null,"subscriberstatus":"SUBSCRIBERSTATUS_CONNECTED","imsi":"262032000000000","mccmnc":"26203","mcc":"262","mnc":"03","msin":"2000000000","servingmsc":"491770","servinghlr":null,"originalnetworkname":"178","originalcountryname":"Germany","originalcountrycode":"DE","originalcountryprefix":"+49","originalnetworkprefix":"178","roamingnetworkname":null,"roamingcountryname":null,"roamingcountrycode":null,"roamingcountryprefix":null,"roamingnetworkprefix":null,"portednetworkname":null,"portedcountryname":null,"portedcountrycode":null,"portedcountryprefix":null,"portednetworkprefix":null,"isvalid":"Yes","isroaming":"No","isported":"No","usercharge":"0.0100","inserttime":"2014-12-28 05:53:03.765798+08","storage":"ASYNC-API","route":"IP4"}]}
-     */
-    console.log(client.parseCallback(params));
+        if (response.status !== 200) {
+            console.log('Received non-OK status code from server.');
+            return;
+        }
 
-    response.writeHead(200);
-    response.write('OK');
-    response.end();
+        let data = response.data;
+        // do something with the data
 
-}).listen(port);
-
-console.log("Callback Handler is listening on port " + port);
+    }
+);
 ```
 
-With that you should be ready to go!
+The HLR API Response Object:
 
-Tests
------
+```json
+{
+   "id":"f94ef092cb53",
+   "msisdn":"+14156226819",
+   "connectivity_status":"CONNECTED",
+   "mccmnc":"310260",
+   "mcc":"310",
+   "mnc":"260",
+   "imsi":"***************",
+   "msin":"**********",
+   "msc":"************",
+   "original_network_name":"Verizon Wireless",
+   "original_country_name":"United States",
+   "original_country_code":"US",
+   "original_country_prefix":"+1",
+   "is_ported":true,
+   "ported_network_name":"T-Mobile US",
+   "ported_country_name":"United States",
+   "ported_country_code":"US",
+   "ported_country_prefix":"+1",
+   "is_roaming":false,
+   "roaming_network_name":null,
+   "roaming_country_name":null,
+   "roaming_country_code":null,
+   "roaming_country_prefix":null,
+   "cost":"0.0100",
+   "timestamp":"2020-08-07 19:16:17.676+0300",
+   "storage":"SYNC-API-2020-08",
+   "route":"IP1",
+   "processing_status":"COMPLETED",
+   "error_code":null,
+   "data_source":"LIVE_HLR"
+}
+```
 
-The code contains annotations and you can find usage examples as tests in `tests/`:
-* `tests/test-client.js`
-* `tests/test-callback.js`
+A detailed documentation of the attributes and connectivity statuses in the HLR API response is [here](https://www.hlr-lookups.com/en/api-docs#post-hlr-lookup).
 
-Please refer to https://www.hlr-lookups.com/en/sdks/nodejs for further documentation or send us an email to service@hlr-lookups.com.
+**Submitting a Number Type (NT) Lookup** ([NT API Docs](https://www.hlr-lookups.com/en/api-docs#post-nt-lookup))
+
+```javascript
+client.post('/nt-lookup',
+    {
+        number: '+4989702626'
+    },
+    function(response) {
+
+        // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
+        console.log('NT Lookup Status Code', response.status);
+        console.log('NT Lookup Response Body', response.data);
+
+        if (response.status !== 200) {
+            console.log('Received non-OK status code from server.');
+            return;
+        }
+
+        let data = response.data;
+        // do something with the data
+
+    }
+);
+```
+
+The NT API Response Object:
+
+```json
+{
+     "id":"2ed0788379c6",
+     "number":"+4989702626",
+     "number_type":"LANDLINE",
+     "query_status":"OK",
+     "is_valid":true,
+     "invalid_reason":null,
+     "is_possibly_ported":false,
+     "is_vanity_number":false,
+     "qualifies_for_hlr_lookup":false,
+     "mccmnc":null,
+     "mcc":null,
+     "mnc":null,
+     "original_network_name":null,
+     "original_country_name":"Germany",
+     "original_country_code":"DE",
+     "regions":[
+        "Munich"
+     ],
+     "timezones":[
+        "Europe/Berlin"
+     ],
+     "info_text":"This is a landline number.",
+     "cost":"0.0050",
+     "timestamp":"2015-12-04 10:36:41.866283+00",
+     "storage":"SYNC-API-NT-2015-12",
+     "route":"LC1"
+}
+```
+
+A detailed documentation of the attributes and connectivity statuses in the NT API response is [here](https://www.hlr-lookups.com/en/api-docs#post-nt-lookup).
+
+**Submitting an MNP Lookup (Mobile Number Portability)** ([MNP API Docs](https://www.hlr-lookups.com/en/api-docs#post-mnp-lookup))
+
+```javascript
+client.post('/mnp-lookup',
+    {
+        msisdn: '+14156226819'
+    },
+    function(response) {
+
+        // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
+        console.log('MNP Lookup Status Code', response.status);
+        console.log('MNP Lookup Response Body', response.data);
+
+        if (response.status !== 200) {
+            console.log('Received non-OK status code from server.');
+            return;
+        }
+
+        let data = response.data;
+        // do something with the data
+
+    }
+);
+```
+
+The MNP API Response Object:
+
+```json
+{
+   "id":"e428acb1c0ae",
+   "msisdn":"+14156226819",
+   "query_status":"OK",
+   "mccmnc":"310260",
+   "mcc":"310",
+   "mnc":"260",
+   "is_ported":true,
+   "original_network_name":"Verizon Wireless:6006 - SVR/2",
+   "original_country_name":"United States",
+   "original_country_code":"US",
+   "original_country_prefix":"+1415",
+   "ported_network_name":"T-Mobile US:6529 - SVR/2",
+   "ported_country_name":"United States",
+   "ported_country_code":"US",
+   "ported_country_prefix":"+1",
+   "extra":"LRN:4154250000",
+   "cost":"0.0050",
+   "timestamp":"2020-08-05 21:21:33.490+0300",
+   "storage":"WEB-CLIENT-SOLO-MNP-2020-08",
+   "route":"PTX",
+   "error_code":null
+}
+```
+
+A detailed documentation of the attributes and connectivity statuses in the MNP API response is [here](https://www.hlr-lookups.com/en/api-docs#post-mnp-lookup).
+
+API Documentation
+-----------------
+Please inspect https://www.hlr-lookups.com/en/api-docs for detailed API documentation or email us at service@hlr-lookups.com.
 
 Support and Feedback
 --------------------
-Your feedback is appreciated! If you have specific problems or bugs with this SDK, please file an issue on Github. For general feedback and support requests, send an email to service@hlr-lookups.com.
+We appreciate your feedback! If you have specific problems or bugs with this SDK, please file an issue on Github. For general feedback and support requests, email us at service@hlr-lookups.com.
 
 Contributing
 ------------
@@ -198,3 +245,4 @@ Contributing
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
