@@ -2,7 +2,7 @@
   "author": "Velocity Made Good Ltd.",
   "name": "node-hlr-client",
   "description": "Official HLR Lookups API SDK for NodeJS by www.hlr-lookups.com",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./lib/index.js",
   "keywords": [
     "hlr",
