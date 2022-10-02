@@ -33,19 +33,14 @@ Get your API key and secret [here](https://www.hlr-lookups.com/en/api-settings).
 Performs an authenticated request against the `GET /auth-test` endpoint. A status code of 200 indicates that you were able to authenticate using you [API credentials](https://www.hlr-lookups.com/en/api-settings#authSettings).
 
 ```javascript
-client.get('/auth-test', 
-    null,
-    function (response) {
+let response = await client.get('/auth-test');
 
-        console.log(response.status);
-        console.log(response.data);
+console.log(response.status);
+console.log(response.data);
 
-        if (response.status === 200) {
-            // authentication was successful
-        }
-
-    }
-);
+if (response.status === 200) {
+    // authentication was successful
+}
 ```
 
 Get your API key and secret [here](https://www.hlr-lookups.com/en/api-settings).
@@ -53,26 +48,19 @@ Get your API key and secret [here](https://www.hlr-lookups.com/en/api-settings).
 **Submitting an HLR Lookup** ([HLR API Docs](https://www.hlr-lookups.com/en/api-docs#post-hlr-lookup))
 
 ```javascript
-client.post('/hlr-lookup',
-    {
-        msisdn: '+905536939460'
-    },
-    function(response) {
+let response = await client.post('/hlr-lookup', {msisdn: '+905536939460'});
 
-        // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
-        console.log('HLR Lookup Status Code', response.status);
-        console.log('HLR Lookup Response Body', response.data);
+// The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
+console.log('HLR Lookup Status Code', response.status);
+console.log('HLR Lookup Response Body', response.data);
 
-        if (response.status !== 200) {
-            console.log('Received non-OK status code from server.');
-            return;
-        }
+if (response.status !== 200) {
+    console.log('Received non-OK status code from server.');
+    return;
+}
 
-        let data = response.data;
-        // do something with the data
-
-    }
-);
+let data = response.data;
+// do something with the data
 ```
 
 The HLR API Response Object:
@@ -117,26 +105,19 @@ A detailed documentation of the attributes and connectivity statuses in the HLR 
 **Submitting a Number Type (NT) Lookup** ([NT API Docs](https://www.hlr-lookups.com/en/api-docs#post-nt-lookup))
 
 ```javascript
-client.post('/nt-lookup',
-    {
-        number: '+4989702626'
-    },
-    function(response) {
+let response = await client.post('/nt-lookup', {number: '+4989702626'});
 
-        // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
-        console.log('NT Lookup Status Code', response.status);
-        console.log('NT Lookup Response Body', response.data);
+// The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
+console.log('NT Lookup Status Code', response.status);
+console.log('NT Lookup Response Body', response.data);
 
-        if (response.status !== 200) {
-            console.log('Received non-OK status code from server.');
-            return;
-        }
+if (response.status !== 200) {
+    console.log('Received non-OK status code from server.');
+    return;
+}
 
-        let data = response.data;
-        // do something with the data
-
-    }
-);
+let data = response.data;
+// do something with the data
 ```
 
 The NT API Response Object:
@@ -177,26 +158,19 @@ A detailed documentation of the attributes and connectivity statuses in the NT A
 **Submitting an MNP Lookup (Mobile Number Portability)** ([MNP API Docs](https://www.hlr-lookups.com/en/api-docs#post-mnp-lookup))
 
 ```javascript
-client.post('/mnp-lookup',
-    {
-        msisdn: '+14156226819'
-    },
-    function(response) {
+let response = await client.post('/mnp-lookup', {msisdn: '+14156226819'});
 
-        // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
-        console.log('MNP Lookup Status Code', response.status);
-        console.log('MNP Lookup Response Body', response.data);
+// The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
+console.log('MNP Lookup Status Code', response.status);
+console.log('MNP Lookup Response Body', response.data);
 
-        if (response.status !== 200) {
-            console.log('Received non-OK status code from server.');
-            return;
-        }
+if (response.status !== 200) {
+    console.log('Received non-OK status code from server.');
+    return;
+}
 
-        let data = response.data;
-        // do something with the data
-
-    }
-);
+let data = response.data;
+// do something with the data
 ```
 
 The MNP API Response Object:
