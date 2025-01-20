@@ -68,11 +68,11 @@ The HLR API Response Object:
 ```json
 {
    "id":"f94ef092cb53",
-   "msisdn":"+14156226819",
+   "msisdn":"+6285117006720",
    "connectivity_status":"CONNECTED",
-   "mccmnc":"310260",
-   "mcc":"310",
-   "mnc":"260",
+   "mccmnc":"51010",
+   "mcc":"510",
+   "mnc":"10",
    "imsi":"***************",
    "msin":"**********",
    "msc":"************",
@@ -83,7 +83,7 @@ The HLR API Response Object:
    "is_ported":true,
    "ported_network_name":"T-Mobile US",
    "ported_country_name":"United States",
-   "ported_country_code":"US",
+   "ported_country_code":"ID",
    "ported_country_prefix":"+1",
    "is_roaming":false,
    "roaming_network_name":null,
@@ -105,7 +105,7 @@ A detailed documentation of the attributes and connectivity statuses in the HLR 
 **Submitting a Number Type (NT) Lookup** ([NT API Docs](https://www.hlr-lookups.com/en/api-docs#post-nt-lookup))
 
 ```javascript
-let response = await client.post('/nt-lookup', {number: '+4989702626'});
+let response = await client.post('/nt-lookup', {number: '+6285117006720'});
 
 // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
 console.log('NT Lookup Status Code', response.status);
@@ -125,7 +125,7 @@ The NT API Response Object:
 ```json
 {
      "id":"2ed0788379c6",
-     "number":"+4989702626",
+     "number":"6285117006720",
      "number_type":"LANDLINE",
      "query_status":"OK",
      "is_valid":true,
@@ -158,7 +158,7 @@ A detailed documentation of the attributes and connectivity statuses in the NT A
 **Submitting an MNP Lookup (Mobile Number Portability)** ([MNP API Docs](https://www.hlr-lookups.com/en/api-docs#post-mnp-lookup))
 
 ```javascript
-let response = await client.post('/mnp-lookup', {msisdn: '+14156226819'});
+let response = await client.post('/mnp-lookup', {msisdn: '+625117006720+'});
 
 // The API returns an HTTP status code of 200 if the request was successfully processed. Let's have a look.
 console.log('MNP Lookup Status Code', response.status);
@@ -178,7 +178,7 @@ The MNP API Response Object:
 ```json
 {
    "id":"e428acb1c0ae",
-   "msisdn":"+14156226819",
+   "msisdn":"+6285117006720",
    "query_status":"OK",
    "mccmnc":"310260",
    "mcc":"310",
@@ -186,7 +186,7 @@ The MNP API Response Object:
    "is_ported":true,
    "original_network_name":"Verizon Wireless:6006 - SVR/2",
    "original_country_name":"United States",
-   "original_country_code":"US",
+   "original_country_code":"ID",
    "original_country_prefix":"+1415",
    "ported_network_name":"T-Mobile US:6529 - SVR/2",
    "ported_country_name":"United States",
@@ -217,6 +217,5 @@ Contributing
 1. Fork it ( https://github.com/vmgltd/hlr-lookup-api-nodejs-sdk/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create a new Pull Request
