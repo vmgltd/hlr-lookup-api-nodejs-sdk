@@ -9,7 +9,7 @@ For SDKs in different programming languages, see https://www.hlr-lookups.com/en/
 Requirements
 ------------
 * NodeJS >= 10.14.0
-* axios >= 0.19.2
+* axios >= 0.28.0
 
 Installation with npm
 ---------------------
